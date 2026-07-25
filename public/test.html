@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Analytica test page</title>
+    <!--
+      Test harness for verifying tracking end-to-end.
+      - data-domain MUST match a site you registered in the dashboard.
+      - data-track-localhost lets the script send while served from localhost.
+      Change data-domain below to your registered domain if it isn't mysite.com.
+    -->
+    <script
+      defer
+      data-domain="mysite.com"
+      data-track-localhost
+      src="/script.js"
+    ></script>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.6; }
+      button, a { font: inherit; }
+      .row { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1rem 0; }
+      button { padding: .5rem 1rem; border: 1px solid #ccc; border-radius: .5rem; background: #fff; cursor: pointer; }
+      code { background: #f3f3f3; padding: .1rem .3rem; border-radius: .3rem; }
+      #log { background: #f7f7f7; border-radius: .5rem; padding: 1rem; font-size: .85rem; white-space: pre-wrap; min-height: 4rem; }
+    </style>
+  </head>
+  <body>
+    <h1>Analytica test page</h1>
+    <p>
+      Each button below simulates a pageview by pushing a new path
+      (the tracker fires on SPA route changes). Click a few, then open your
+      dashboard for <code>mysite.com</code>.
+    </p>
+
+    <div class="row">
+      <button onclick="go('/')">Home /</button>
+      <button onclick="go('/about')">/about</button>
+      <button onclick="go('/pricing')">/pricing</button>
+      <button onclick="go('/blog')">/blog</button>
+      <button onclick="go('/contact')">/contact</button>
+    </div>
+
+    <p>Current path: <code id="path">/</code></p>
+    <div id="log">Waiting for clicks…</div>
+
+    <script>
+      function go(path) {
+        history.pushState({}, "", path);
+        document.getElementById("path").textContent = path;
+      }
+      // Show whether beacons are being sent (mirrors the tracker's request).
+      var origBeacon = navigator.sendBeacon && navigator.sendBeacon.bind(navigator);
+      if (origBeacon) {
+        navigator.sendBeacon = function (url, body) {
+          document.getElementById("log").textContent =
+            "sent -> " + url + "\n" + body;
+          return origBeacon(url, body);
+        };
+      }
+    </script>
+  </body>
+</html>
