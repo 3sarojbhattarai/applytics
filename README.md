@@ -1,8 +1,6 @@
-# Analytica
+# Applytics
 
-Privacy-friendly, cookieless web analytics — a google analytics alternatives that
-tracks pageviews and visitor stats for your websites with a tiny script and no
-personal data collection.
+Applytics is a lightweight and open-source Google Analytics alternative with more features.
 
 ## Features
 
