@@ -54,17 +54,17 @@ async function main() {
   const db = client.db(dbName);
 
   // Ensure a demo user + site exist so the seeded data is viewable.
-  let user = await db.collection("users").findOne({ email: "demo@analytica.dev" });
+  let user = await db.collection("users").findOne({ email: "admin@localhost.com" });
   if (!user) {
     const passwordHash = await bcrypt.hash("password123", 10);
     const r = await db.collection("users").insertOne({
       name: "Demo User",
-      email: "demo@analytica.dev",
+      email: "admin@localhost.com",
       passwordHash,
       createdAt: new Date(),
     });
     user = await db.collection("users").findOne({ _id: r.insertedId });
-    console.log("Created demo user: demo@analytica.dev / password123");
+    console.log("Created demo user: admin@localhost.com / password123");
   }
 
   let site = await db.collection("sites").findOne({ domain });
