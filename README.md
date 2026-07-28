@@ -100,7 +100,7 @@ buttons to generate pageviews, then check your dashboard. (This guard lives in
                                               ▼
                                          MongoDB  (raw `events`)
                                               │
-                                    aggregation pipelines (lib/stats.ts)
+                                    aggregation pipelines (src/lib/stats.ts)
                                               ▼
                                     /api/stats/[siteId]  ──►  dashboard UI
 ```
@@ -112,37 +112,38 @@ buttons to generate pageviews, then check your dashboard. (This guard lives in
   session if their last event was within 30 minutes, otherwise it starts a new
   session (an entry page).
 - **Stats** are computed on the fly with MongoDB aggregation pipelines in
-  [`lib/stats.ts`](lib/stats.ts).
+  [`src/lib/stats.ts`](src/lib/stats.ts).
 
 ## Project structure
 
 ```
-app/
-  api/
-    event/route.ts            # pageview ingestion (POST)
-    auth/{register,login,logout}/route.ts
-    sites/route.ts            # list / create sites
-    stats/[siteId]/route.ts   # dashboard stats payload
-  dashboard/                  # authenticated dashboard pages
-  login/  register/  page.tsx # auth pages + landing
-  layout.tsx  globals.css
-components/
-  ui/                         # shadcn/ui primitives
-  dashboard/                  # KPI row, chart, breakdown lists, etc.
-  providers.tsx               # React Query provider
-  auth-form.tsx
-lib/
-  mongodb.ts                  # cached client + index setup
-  auth.ts                     # password hashing, JWT sessions
-  parse.ts                    # UA parsing, referrer source, visitor hash
-  stats.ts                    # aggregation helpers
-  types.ts  utils.ts
+src/
+  app/
+    api/
+      event/route.ts            # pageview ingestion (POST)
+      auth/{register,login,logout}/route.ts
+      sites/route.ts            # list / create sites
+      stats/[siteId]/route.ts   # dashboard stats payload
+    dashboard/                  # authenticated dashboard pages
+    login/  register/  page.tsx # auth pages + landing
+    layout.tsx  globals.css
+  components/
+    ui/                         # shadcn/ui primitives
+    dashboard/                  # KPI row, chart, breakdown lists, etc.
+    providers.tsx               # React Query provider
+    auth-form.tsx
+  lib/
+    mongodb.ts                  # cached client + index setup
+    auth.ts                     # password hashing, JWT sessions
+    parse.ts                    # UA parsing, referrer source, visitor hash
+    stats.ts                    # aggregation helpers
+    types.ts  utils.ts
+  middleware.ts                 # protects /dashboard routes
 public/
-  script.js                   # the tracking snippet
-  test.html                   # local test harness
+  script.js                     # the tracking snippet
+  test.html                     # local test harness
 scripts/
-  seed.ts                     # synthetic data seeder
-middleware.ts                 # protects /dashboard routes
+  seed.ts                       # synthetic data seeder
 ```
 
 ## API reference
